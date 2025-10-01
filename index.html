@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car World</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      background: #222;
+      padding: 0.5rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin: 0 1rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      color: #f39c12;
+    }
+
+    .hero {
+      background: url('car-hero.jpg') no-repeat center center/cover;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card img {
+      width: 100%;
+      display: block;
+    }
+
+    .card h3 {
+      margin: 0.5rem;
+    }
+
+    .card p {
+      margin: 0.5rem 1rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Car World</h1>
+    <p>Your hub for everything cars</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Brands</a></li>
+      <li><a href="#">Reviews</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h1>Explore the World of Cars</h1>
+  </section>
+
+  <main class="container">
+    <h2>Featured Cars</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="car1.jpg" alt="Sports Car">
+        <h3>Sports Car</h3>
+        <p>Experience speed, style, and precision engineering.</p>
+      </div>
+
+      <div class="card">
+        <img src="car2.jpg" alt="Luxury Car">
+        <h3>Luxury Car</h3>
+        <p>Comfort and elegance blended with performance.</p>
+      </div>
+
+      <div class="card">
+        <img src="car3.jpg" alt="SUV">
+        <h3>SUV</h3>
+        <p>Built for adventure, space, and all terrains.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Car World. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+
