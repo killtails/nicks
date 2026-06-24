@@ -1,158 +1,536 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Car World</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
-      color: #333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nick's Beer Garden — Wicker Park, Chicago</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#173A46;
+    --teal-deep:#102b34;
+    --black:#121319;
+    --charcoal:#171B1D;
+    --cream:#EBE1C3;
+    --cream-dim:#c9c0a6;
+    --gold:#B58A3C;
+    --gold-bright:#d2a64f;
+    --tan:#C0A77A;
+    --neon:#4ee07a;
+    --line:rgba(235,225,195,.14);
+    --serif:'Libre Baskerville', Georgia, serif;
+  }
 
-    header {
-      background: #111;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--serif);
+    background:var(--charcoal);
+    color:var(--cream);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{width:min(1180px,92vw);margin-inline:auto}
 
-    nav {
-      background: #222;
-      padding: 0.5rem;
-    }
+  /* ---------- focus / a11y ---------- */
+  a:focus-visible,button:focus-visible{
+    outline:2px solid var(--gold-bright);
+    outline-offset:3px;
+    border-radius:2px;
+  }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      margin: 0;
-      padding: 0;
-    }
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-block;
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    padding:.85em 1.9em;
+    border:1px solid var(--gold);
+    color:var(--cream);
+    background:transparent;
+    cursor:pointer;
+    transition:background .25s ease,color .25s ease,transform .25s ease;
+  }
+  .btn:hover{background:var(--gold);color:var(--black);transform:translateY(-2px)}
+  .btn-solid{background:var(--gold);color:var(--black)}
+  .btn-solid:hover{background:var(--gold-bright);border-color:var(--gold-bright)}
 
-    nav ul li {
-      margin: 0 1rem;
-    }
+  /* ---------- eyebrow / section headings ---------- */
+  .eyebrow{
+    font-size:.7rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;align-items:center;gap:.8rem;
+    margin-bottom:1.6rem;
+  }
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+  .eyebrow.center{justify-content:center}
+  .eyebrow.center::before,.eyebrow.center::after{content:"";width:48px;height:1px;background:var(--line);flex:none}
 
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      font-weight: bold;
-    }
+  /* ============ HEADER ============ */
+  header{
+    position:fixed;inset:0 0 auto 0;z-index:50;
+    transition:background .3s ease,backdrop-filter .3s ease,border-color .3s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(18,19,25,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 0}
+  .logo{display:flex;flex-direction:column;line-height:.9;letter-spacing:.04em}
+  .logo b{font-size:1.55rem;font-weight:700}
+  .logo span{font-size:.52rem;letter-spacing:.5em;color:var(--gold);padding-left:.2em}
+  nav ul{display:flex;gap:2.1rem;list-style:none;align-items:center}
+  nav a{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-dim);transition:color .2s}
+  nav a:hover{color:var(--gold-bright)}
+  .header-right{display:flex;align-items:center;gap:1.6rem}
+  .socials{display:flex;gap:1rem}
+  .socials a{color:var(--cream-dim);transition:color .2s}
+  .socials a:hover{color:var(--gold-bright)}
+  .socials svg{width:16px;height:16px;display:block}
+  .menu-toggle{display:none;background:none;border:none;color:var(--cream);cursor:pointer}
+  .menu-toggle svg{width:26px;height:26px}
 
-    nav ul li a:hover {
-      color: #f39c12;
-    }
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:center;
+    padding-top:5rem;overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 80% 10%, rgba(23,58,70,.55), transparent 60%),
+      radial-gradient(90% 70% at 10% 90%, rgba(181,138,60,.16), transparent 55%),
+      linear-gradient(180deg, #0c1418 0%, #11181c 45%, #0a0d10 100%);
+  }
+  /* warm bokeh / string-light ambiance */
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:
+      radial-gradient(2px 2px at 12% 22%, rgba(232,200,120,.9), transparent),
+      radial-gradient(2px 2px at 28% 14%, rgba(232,200,120,.6), transparent),
+      radial-gradient(3px 3px at 41% 26%, rgba(232,200,120,.8), transparent),
+      radial-gradient(2px 2px at 55% 12%, rgba(232,200,120,.5), transparent),
+      radial-gradient(2px 2px at 68% 30%, rgba(232,200,120,.7), transparent),
+      radial-gradient(2px 2px at 84% 18%, rgba(232,200,120,.55), transparent),
+      radial-gradient(3px 3px at 20% 70%, rgba(232,200,120,.4), transparent),
+      radial-gradient(2px 2px at 90% 64%, rgba(232,200,120,.45), transparent),
+      radial-gradient(2px 2px at 7% 48%, rgba(232,200,120,.4), transparent);
+    opacity:.8;
+    animation:twinkle 6s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.65}50%{opacity:.95}}
 
-    .hero {
-      background: url('car-hero.jpg') no-repeat center center/cover;
-      height: 60vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-    }
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;position:relative;z-index:2}
+  .hero-copy{opacity:0;transform:translateY(24px);animation:rise .9s .15s ease forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .hero h1{
+    font-weight:700;line-height:.98;letter-spacing:.01em;
+    font-size:clamp(2.8rem,6.5vw,5.4rem);text-transform:uppercase;
+    text-shadow:0 4px 30px rgba(0,0,0,.6);
+  }
+  .since{font-style:italic;color:var(--gold-bright);font-size:1.5rem;margin:1.3rem 0 1rem}
+  .tagline{font-size:1.05rem;color:var(--cream);margin-bottom:2.2rem;max-width:24ch}
 
-    .hero h1 {
-      font-size: 3rem;
-    }
+  /* the neon sign — signature element */
+  .neon{
+    justify-self:center;text-align:center;padding:2.4rem 2.6rem;border-radius:6px;
+    border:2px solid rgba(78,224,122,.35);
+    background:radial-gradient(circle at 50% 40%, rgba(78,224,122,.08), rgba(10,16,18,.55));
+    box-shadow:0 0 50px rgba(78,224,122,.12), inset 0 0 40px rgba(78,224,122,.06);
+  }
+  .neon .script{
+    font-style:italic;font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);color:#eafff0;line-height:1;
+    text-shadow:0 0 6px #b6ffce,0 0 14px var(--neon),0 0 28px var(--neon),0 0 48px rgba(78,224,122,.6);
+    animation:flicker 5s infinite;
+  }
+  .neon .garden{
+    display:block;margin-top:.5rem;letter-spacing:.42em;font-size:.95rem;text-transform:uppercase;
+    color:#dffce8;text-shadow:0 0 5px var(--neon),0 0 16px rgba(78,224,122,.6);
+  }
+  @keyframes flicker{
+    0%,18%,22%,25%,53%,57%,100%{opacity:1}
+    20%,24%,55%{opacity:.55}
+  }
 
-    .container {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
+  .scroll-cue{
+    position:absolute;left:50%;bottom:2rem;transform:translateX(-50%);
+    color:var(--cream-dim);font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;z-index:2;
+    display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  }
+  .scroll-cue span{width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:drop 2s infinite}
+  @keyframes drop{0%{opacity:0;transform:translateY(-8px)}50%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
+  /* ============ SECTION SHELL ============ */
+  section{padding:6rem 0}
+  .events{background:linear-gradient(180deg,#0e1417,#11181c)}
+  .split-section{background:var(--charcoal)}
+  .hours{background:linear-gradient(180deg,#11181c,#0d1316)}
 
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.2s ease;
-    }
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.6rem;flex-wrap:wrap;gap:1rem}
+  .sec-head h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+  .link-arrow{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:inline-flex;gap:.5rem;align-items:center}
+  .link-arrow:hover{color:var(--gold-bright)}
 
-    .card:hover {
-      transform: scale(1.03);
-    }
+  /* ---------- events grid ---------- */
+  .event-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+  .event{
+    position:relative;border:1px solid var(--line);background:var(--black);
+    min-height:330px;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:1.5rem;overflow:hidden;transition:transform .3s ease,border-color .3s ease;
+  }
+  .event::before{
+    content:"";position:absolute;inset:0;z-index:0;
+    background:linear-gradient(180deg,rgba(23,58,70,.35),rgba(18,19,25,.95));
+  }
+  .event:nth-child(1)::before{background:linear-gradient(180deg,rgba(120,70,40,.4),rgba(18,19,25,.96))}
+  .event:nth-child(2)::before{background:linear-gradient(180deg,rgba(60,40,110,.4),rgba(18,19,25,.96))}
+  .event:nth-child(3)::before{background:linear-gradient(180deg,rgba(150,120,40,.35),rgba(18,19,25,.96))}
+  .event:nth-child(4)::before{background:linear-gradient(180deg,rgba(120,40,60,.4),rgba(18,19,25,.96))}
+  .event:hover{transform:translateY(-6px);border-color:var(--gold)}
+  .event > *{position:relative;z-index:1}
+  .date-chip{
+    position:absolute;top:1.1rem;left:1.1rem;z-index:1;background:var(--black);
+    border:1px solid var(--line);text-align:center;padding:.5rem .7rem;line-height:1;
+  }
+  .date-chip .m{font-size:.6rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+  .date-chip .d{font-size:1.5rem;font-weight:700;display:block;margin:.15rem 0}
+  .date-chip .w{font-size:.55rem;letter-spacing:.2em;color:var(--cream-dim);text-transform:uppercase}
+  .event h3{font-size:1.15rem;font-weight:700;text-transform:uppercase;margin-bottom:.4rem}
+  .event p{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .events-cta{text-align:center;margin-top:2.8rem}
 
-    .card img {
-      width: 100%;
-      display: block;
-    }
+  /* ---------- split: about + on tap ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
+  .about-photo{
+    aspect-ratio:4/3;border:1px solid var(--line);position:relative;overflow:hidden;margin-bottom:1.8rem;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(78,224,122,.12), transparent 40%),
+      linear-gradient(135deg,#1b2a30,#0e1316);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .about-photo .ph-neon{
+    font-style:italic;font-weight:700;font-size:2rem;color:#eafff0;
+    text-shadow:0 0 6px var(--neon),0 0 18px rgba(78,224,122,.6);
+  }
+  .about-photo small{position:absolute;bottom:.8rem;letter-spacing:.35em;font-size:.55rem;color:var(--neon);text-transform:uppercase}
+  .prose p{color:var(--cream-dim);margin-bottom:1.1rem;font-size:1rem}
 
-    .card h3 {
-      margin: 0.5rem;
-    }
+  /* on tap list */
+  .tap-list{list-style:none;display:flex;flex-direction:column}
+  .tap{display:flex;align-items:center;gap:1.1rem;padding:1.1rem 0;border-bottom:1px solid var(--line)}
+  .tap:first-child{border-top:1px solid var(--line)}
+  .tap-badge{
+    width:46px;height:46px;flex:none;border:1px solid var(--gold);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:.6rem;letter-spacing:.05em;
+    color:var(--gold);text-align:center;text-transform:uppercase;
+  }
+  .tap-info{flex:1}
+  .tap-info b{font-weight:700;font-size:1rem;display:block}
+  .tap-info span{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-dim)}
+  .tap-abv{font-style:italic;color:var(--gold-bright);font-size:.95rem}
+  .tap-cta{margin-top:2rem}
 
-    .card p {
-      margin: 0.5rem 1rem 1rem;
-      font-size: 0.9rem;
-    }
+  /* ---------- hours & location ---------- */
+  .hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+  .addr{display:flex;gap:.7rem;align-items:flex-start;margin-bottom:1.8rem;color:var(--cream)}
+  .addr svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--gold)}
+  .hours-table{list-style:none;width:100%}
+  .hours-table li{display:flex;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .hours-table .day{letter-spacing:.06em;color:var(--cream-dim)}
+  .hours-table .time{font-style:italic;color:var(--cream)}
+  .hours-table .closed{color:#7d8488;font-style:italic}
+  .hours-table li.today{color:var(--gold-bright)}
+  .hours-table li.today .day,.hours-table li.today .time{color:var(--gold-bright)}
 
-    footer {
-      background: #111;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
+  /* stylized map */
+  .map{
+    position:relative;aspect-ratio:4/3;border:1px solid var(--line);overflow:hidden;
+    background:linear-gradient(135deg,#10171b,#0b1013);
+  }
+  .map .grid-lines{position:absolute;inset:0;opacity:.5}
+  .map .road{position:absolute;background:rgba(235,225,195,.1)}
+  .map .road.h{height:2px;left:0;right:0}
+  .map .road.v{width:2px;top:0;bottom:0}
+  .map .road.main{background:rgba(181,138,60,.4);height:3px;transform:rotate(-28deg) scale(1.6)}
+  .map .pin{
+    position:absolute;top:46%;left:48%;width:34px;height:34px;transform:translate(-50%,-100%);
+    color:var(--gold-bright);filter:drop-shadow(0 0 8px rgba(181,138,60,.6));
+  }
+  .map .label{position:absolute;bottom:1rem;left:1rem;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim)}
+  .map-cta{margin-top:1.5rem}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--black);border-top:1px solid var(--line);padding:4rem 0 2rem}
+  .foot-top{display:grid;grid-template-columns:1.3fr 1fr auto;gap:3rem;align-items:center;padding-bottom:2.8rem;border-bottom:1px solid var(--line)}
+  .foot-motto{font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.25}
+  .foot-motto .accent{color:var(--gold)}
+  .foot-links{display:flex;flex-wrap:wrap;gap:.6rem 1.8rem}
+  .foot-links a{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cream-dim)}
+  .foot-links a:hover{color:var(--gold-bright)}
+  .foot-social{display:flex;gap:1.1rem}
+  .foot-social a{color:var(--cream-dim)}
+  .foot-social a:hover{color:var(--gold-bright)}
+  .foot-social svg{width:18px;height:18px}
+  .copyright{text-align:center;padding-top:2rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#6a716f}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:900px){
+    nav{
+      position:fixed;inset:0 0 0 auto;width:min(78vw,320px);background:var(--black);
+      border-left:1px solid var(--line);transform:translateX(100%);transition:transform .35s ease;
+      padding:6rem 2rem;z-index:60;
     }
-  </style>
+    nav.open{transform:none}
+    nav ul{flex-direction:column;gap:1.6rem;align-items:flex-start}
+    nav a{font-size:.95rem}
+    .menu-toggle{display:block;z-index:70}
+    .socials{display:none}
+    .hero-grid{grid-template-columns:1fr;gap:3rem;text-align:center}
+    .hero-copy{order:2}
+    .neon{order:1;margin-top:1rem}
+    .tagline{margin-inline:auto}
+    .event-grid{grid-template-columns:repeat(2,1fr)}
+    .split,.hours-grid,.foot-top{grid-template-columns:1fr;gap:2.5rem}
+    .foot-top{text-align:center}
+    .foot-links,.foot-social{justify-content:center}
+  }
+  @media(max-width:540px){
+    section{padding:4.5rem 0}
+    .event-grid{grid-template-columns:1fr}
+    .hero h1{font-size:13vw}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto}
+    .hero-copy{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Car World</h1>
-    <p>Your hub for everything cars</p>
-  </header>
 
-  <nav>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Brands</a></li>
-      <li><a href="#">Reviews</a></li>
-      <li><a href="#">Gallery</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </nav>
-
-  <section class="hero">
-    <h1>Explore the World of Cars</h1>
-  </section>
-
-  <main class="container">
-    <h2>Featured Cars</h2>
-    <div class="grid">
-      <div class="card">
-        <img src="car1.jpg" alt="Sports Car">
-        <h3>Sports Car</h3>
-        <p>Experience speed, style, and precision engineering.</p>
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <div class="wrap topbar">
+    <a href="#top" class="logo"><b>Nick's</b><span>CHICAGO</span></a>
+    <nav id="nav">
+      <ul>
+        <li><a href="#tap">On Tap</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#hours">Hours &amp; Location</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <div class="socials">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l.5-3.5H13V7.3c0-1 .3-1.7 1.8-1.7H17V2.5C16.6 2.4 15.5 2.3 14.2 2.3c-2.7 0-4.6 1.6-4.6 4.7v2.5H6.5V13h3.1v9z"/></svg></a>
+        <a href="#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
       </div>
+      <a href="#tap" class="btn">Beer List</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
 
-      <div class="card">
-        <img src="car2.jpg" alt="Luxury Car">
-        <h3>Luxury Car</h3>
-        <p>Comfort and elegance blended with performance.</p>
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>Wicker Park<br>Nights</h1>
+      <p class="since">Since 1977.</p>
+      <p class="tagline">Cold beer. Live music. Good people.</p>
+      <a href="#about" class="btn">Our Story</a>
+    </div>
+    <div class="neon">
+      <span class="script">Nick's</span>
+      <span class="garden">Beer Garden</span>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll<span></span></div>
+</section>
+
+<!-- ===== EVENTS ===== -->
+<section class="events" id="events">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">This Week</p>
+        <h2>Upcoming Events</h2>
       </div>
+      <a href="#" class="link-arrow">View Calendar →</a>
+    </div>
 
-      <div class="card">
-        <img src="car3.jpg" alt="SUV">
-        <h3>SUV</h3>
-        <p>Built for adventure, space, and all terrains.</p>
+    <div class="event-grid">
+      <article class="event">
+        <div class="date-chip"><span class="m">May</span><span class="d">17</span><span class="w">Sat</span></div>
+        <h3>The Lucky 5</h3>
+        <p>Live Music • 9PM</p>
+      </article>
+      <article class="event">
+        <div class="date-chip"><span class="m">May</span><span class="d">18</span><span class="w">Sun</span></div>
+        <h3>DJ Good Spin</h3>
+        <p>DJ Set • 10PM</p>
+      </article>
+      <article class="event">
+        <div class="date-chip"><span class="m">May</span><span class="d">19</span><span class="w">Mon</span></div>
+        <h3>Music Bingo</h3>
+        <p>Hosted by Broadway Bingo • 7PM</p>
+      </article>
+      <article class="event">
+        <div class="date-chip"><span class="m">May</span><span class="d">21</span><span class="w">Wed</span></div>
+        <h3>Karaoke Night</h3>
+        <p>Be the Star • 9PM</p>
+      </article>
+    </div>
+
+    <div class="events-cta"><a href="#" class="btn">View All Events</a></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT + ON TAP ===== -->
+<section class="split-section" id="about">
+  <div class="wrap split">
+    <!-- About -->
+    <div>
+      <p class="eyebrow">About Nick's</p>
+      <div class="about-photo">
+        <span class="ph-neon">Nick's</span>
+        <small>Est. 1977 — Wicker Park</small>
+      </div>
+      <div class="prose">
+        <p>Nick's has deep roots in this neighborhood. The building dates back to 1911, and over the years it's been home to a mix of dreams, regulars, and a whole lot of great nights.</p>
+        <p>We're still doing what we love: hosting live music, pouring strong drinks, and keeping Wicker Park weird in the best way.</p>
+        <a href="#" class="btn" style="margin-top:.5rem">Read More</a>
       </div>
     </div>
-  </main>
 
-  <footer>
-    <p>&copy; 2025 Car World. All rights reserved.</p>
-  </footer>
+    <!-- On Tap -->
+    <div id="tap">
+      <p class="eyebrow">On Tap Tonight</p>
+      <ul class="tap-list">
+        <li class="tap">
+          <div class="tap-badge">Half<br>Acre</div>
+          <div class="tap-info"><b>Daisy Cutter</b><span>Pale Ale</span></div>
+          <div class="tap-abv">6.2%</div>
+        </li>
+        <li class="tap">
+          <div class="tap-badge">3<br>Floyds</div>
+          <div class="tap-info"><b>Zombie Dust</b><span>Pale Ale</span></div>
+          <div class="tap-abv">6.2%</div>
+        </li>
+        <li class="tap">
+          <div class="tap-badge">Off<br>Color</div>
+          <div class="tap-info"><b>Apex Predator</b><span>Farmhouse Ale</span></div>
+          <div class="tap-abv">6.5%</div>
+        </li>
+        <li class="tap">
+          <div class="tap-badge">Miller</div>
+          <div class="tap-info"><b>Miller Lite</b><span>Pilsner</span></div>
+          <div class="tap-abv">4.2%</div>
+        </li>
+      </ul>
+      <div class="tap-cta"><a href="#" class="btn-solid btn">View Beer List</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOURS & LOCATION ===== -->
+<section class="hours" id="hours">
+  <div class="wrap">
+    <p class="eyebrow center">Find Us</p>
+    <div class="hours-grid">
+      <div>
+        <div class="sec-head" style="margin-bottom:1.6rem"><h2>Hours &amp; Location</h2></div>
+        <p class="addr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          1516 N. Milwaukee Ave<br>Chicago, IL 60622
+        </p>
+        <ul class="hours-table">
+          <li><span class="day">Mon</span><span class="time closed">Closed</span></li>
+          <li><span class="day">Tue</span><span class="time closed">Closed</span></li>
+          <li><span class="day">Wed</span><span class="time">7pm – 3am</span></li>
+          <li><span class="day">Thu</span><span class="time">4pm – 4am</span></li>
+          <li><span class="day">Fri</span><span class="time">4pm – 4am</span></li>
+          <li><span class="day">Sat</span><span class="time">12pm – 5am</span></li>
+          <li><span class="day">Sun</span><span class="time">4pm – 4am</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="map" role="img" aria-label="Map showing Nick's Beer Garden on N. Milwaukee Ave">
+          <div class="grid-lines">
+            <span class="road h" style="top:25%"></span>
+            <span class="road h" style="top:60%"></span>
+            <span class="road h" style="top:82%"></span>
+            <span class="road v" style="left:30%"></span>
+            <span class="road v" style="left:68%"></span>
+            <span class="road main" style="top:50%"></span>
+          </div>
+          <svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+          <span class="label">N. Milwaukee Ave • Wicker Park</span>
+        </div>
+        <div class="map-cta"><a href="#" class="btn">Get Directions</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-top">
+      <p class="foot-motto">Cold Beer.<br><span class="accent">Live Music.</span><br>Good People.</p>
+      <div class="foot-links">
+        <a href="#tap">Beer List</a>
+        <a href="#events">Events</a>
+        <a href="#about">About</a>
+        <a href="#hours">Hours &amp; Location</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-social">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l.5-3.5H13V7.3c0-1 .3-1.7 1.8-1.7H17V2.5C16.6 2.4 15.5 2.3 14.2 2.3c-2.7 0-4.6 1.6-4.6 4.7v2.5H6.5V13h3.1v9z"/></svg></a>
+        <a href="#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+      </div>
+    </div>
+    <p class="copyright">© 2024 Nick's Beer Garden. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // sticky header background on scroll
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  // mobile menu
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  }));
+
+  // highlight today's hours row
+  const today = new Date().getDay(); // 0 Sun ... 6 Sat
+  const order = [1,2,3,4,5,6,0]; // table is Mon→Sun
+  const rows = document.querySelectorAll('.hours-table li');
+  const idx = order.indexOf(today);
+  if (rows[idx]) rows[idx].classList.add('today');
+</script>
 </body>
 </html>
-
