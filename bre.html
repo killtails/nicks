@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#121319">
+<title>Nick's Beer Garden — Brand Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#171B1D; --near-black:#121319; --teal:#173A46; --teal-deep:#102B34;
+    --cream:#EBE1C3; --cream-dim:#C9C0A6; --gold:#B58A3C; --gold-bright:#D2A64F;
+    --tan:#C0A77A; --neon:#4EE07A; --hairline:rgba(235,225,195,.14);
+    --serif:'Libre Baskerville', Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:var(--serif);background:var(--charcoal);color:var(--cream);
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(60% 50% at 100% 0%, rgba(23,58,70,.35), transparent 60%);
+    background-repeat:no-repeat;
+  }
+  .wrap{width:min(960px,92vw);margin:0 auto;padding:4rem 0 3rem}
+
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);
+    display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;
+  }
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--hairline)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);display:inline-block}
+
+  /* header */
+  header{margin-bottom:3.2rem}
+  header .kicker{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
+  header h1{font-weight:700;font-size:clamp(2.4rem,6vw,3.4rem);line-height:1}
+  header p{font-style:italic;color:var(--cream-dim);font-size:1.1rem;margin-top:.7rem}
+
+  section{margin-bottom:3.4rem}
+
+  /* swatch strip */
+  .strip{display:grid;grid-template-columns:repeat(8,1fr);gap:.6rem;margin-bottom:2.4rem}
+  .chip{cursor:pointer}
+  .chip .sw{height:78px;border-radius:5px;border:1px solid rgba(58,65,69,.9)}
+  .chip .hex{font-size:.6rem;letter-spacing:.08em;color:var(--cream-dim);text-align:center;margin-top:.5rem;text-transform:uppercase}
+  .chip .nm{font-size:.62rem;color:var(--cream);text-align:center;margin-top:.15rem}
+
+  /* grouped detail */
+  .groups{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem 3rem}
+  .group h2{
+    font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+    padding-bottom:.7rem;border-bottom:1px solid var(--hairline);margin-bottom:.4rem;
+  }
+  .row{
+    display:grid;grid-template-columns:34px 1fr auto;gap:.9rem;align-items:center;
+    padding:.7rem 0;border-bottom:1px solid var(--hairline);cursor:pointer;transition:background .15s;
+  }
+  .row:last-child{border-bottom:0}
+  .row:hover{background:rgba(235,225,195,.03)}
+  .row .sw{width:34px;height:22px;border-radius:3px;border:1px solid rgba(58,65,69,.9)}
+  .row .name{font-size:.98rem;color:var(--cream)}
+  .row .use{display:block;font-size:.74rem;color:var(--cream-dim);font-style:italic;margin-top:.05rem}
+  .row .hex{font-size:.74rem;letter-spacing:.06em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+
+  /* typography */
+  .type-name{font-weight:700;font-size:clamp(2rem,5vw,2.8rem);line-height:1}
+  .type-sub{font-style:italic;color:var(--cream-dim);margin:.4rem 0 1.6rem}
+  .glyphs{font-size:clamp(1.3rem,3.4vw,1.9rem);color:var(--cream);letter-spacing:.04em;padding-bottom:1.6rem;border-bottom:1px solid var(--hairline);margin-bottom:.4rem}
+  .style-row{
+    display:grid;grid-template-columns:170px 1fr;gap:1.5rem;align-items:baseline;
+    padding:1.1rem 0;border-bottom:1px solid var(--hairline);
+  }
+  .style-row .label{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .style-row .label small{display:block;letter-spacing:.04em;text-transform:none;color:var(--cream-dim);font-style:italic;font-size:.86rem;margin-top:.25rem}
+  .sample-bold{font-weight:700;font-size:1.5rem}
+  .sample-reg{font-weight:400;font-size:1.25rem;color:var(--cream-dim)}
+  .sample-ital{font-style:italic;font-weight:400;font-size:1.5rem;color:var(--gold-bright)}
+  .source{font-style:italic;color:var(--cream-dim);font-size:.85rem;margin-top:1.2rem}
+
+  footer{border-top:1px solid var(--hairline);padding-top:1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+  footer span{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim)}
+
+  /* copy toast */
+  #toast{
+    position:fixed;left:50%;bottom:2rem;transform:translateX(-50%) translateY(120%);
+    background:var(--near-black);border:1px solid var(--gold);color:var(--cream);
+    padding:.6rem 1.1rem;border-radius:4px;font-size:.78rem;letter-spacing:.06em;
+    transition:transform .3s ease;z-index:10;
+  }
+  #toast.show{transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:680px){
+    .strip{grid-template-columns:repeat(4,1fr)}
+    .groups{grid-template-columns:1fr}
+    .style-row{grid-template-columns:1fr;gap:.5rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Brand Reference <span class="dot"></span></p>
+    <h1>Nick's Beer Garden</h1>
+    <p>Color &amp; Typography — Wicker Park, Chicago</p>
+  </header>
+
+  <!-- COLOR PALETTE -->
+  <section>
+    <p class="eyebrow">Color Palette</p>
+
+    <div class="strip" id="strip">
+      <div class="chip" data-hex="#171B1D"><div class="sw" style="background:#171B1D"></div><div class="hex">#171B1D</div><div class="nm">Charcoal</div></div>
+      <div class="chip" data-hex="#121319"><div class="sw" style="background:#121319"></div><div class="hex">#121319</div><div class="nm">Near Black</div></div>
+      <div class="chip" data-hex="#173A46"><div class="sw" style="background:#173A46"></div><div class="hex">#173A46</div><div class="nm">Deep Teal</div></div>
+      <div class="chip" data-hex="#EBE1C3"><div class="sw" style="background:#EBE1C3"></div><div class="hex">#EBE1C3</div><div class="nm">Cream</div></div>
+      <div class="chip" data-hex="#B58A3C"><div class="sw" style="background:#B58A3C"></div><div class="hex">#B58A3C</div><div class="nm">Gold</div></div>
+      <div class="chip" data-hex="#D2A64F"><div class="sw" style="background:#D2A64F"></div><div class="hex">#D2A64F</div><div class="nm">Gold Bright</div></div>
+      <div class="chip" data-hex="#C0A77A"><div class="sw" style="background:#C0A77A"></div><div class="hex">#C0A77A</div><div class="nm">Tan</div></div>
+      <div class="chip" data-hex="#4EE07A"><div class="sw" style="background:#4EE07A"></div><div class="hex">#4EE07A</div><div class="nm">Neon</div></div>
+    </div>
+
+    <div class="groups">
+      <div class="group">
+        <h2>Backgrounds &amp; Surfaces</h2>
+        <div class="row" data-hex="#171B1D"><span class="sw" style="background:#171B1D"></span><span><span class="name">Charcoal</span><span class="use">Page background</span></span><span class="hex">#171B1D</span></div>
+        <div class="row" data-hex="#121319"><span class="sw" style="background:#121319"></span><span><span class="name">Near Black</span><span class="use">Cards, menu, footer</span></span><span class="hex">#121319</span></div>
+        <div class="row" data-hex="#173A46"><span class="sw" style="background:#173A46"></span><span><span class="name">Deep Teal</span><span class="use">Hero glow / ambient</span></span><span class="hex">#173A46</span></div>
+        <div class="row" data-hex="#102B34"><span class="sw" style="background:#102B34"></span><span><span class="name">Teal Deep</span><span class="use">Deeper teal shadow</span></span><span class="hex">#102B34</span></div>
+      </div>
+
+      <div class="group">
+        <h2>Accents</h2>
+        <div class="row" data-hex="#B58A3C"><span class="sw" style="background:#B58A3C"></span><span><span class="name">Gold</span><span class="use">Buttons, eyebrows, labels</span></span><span class="hex">#B58A3C</span></div>
+        <div class="row" data-hex="#D2A64F"><span class="sw" style="background:#D2A64F"></span><span><span class="name">Gold Bright</span><span class="use">Hover &amp; highlights</span></span><span class="hex">#D2A64F</span></div>
+        <div class="row" data-hex="#C0A77A"><span class="sw" style="background:#C0A77A"></span><span><span class="name">Tan</span><span class="use">Warm neutral accent</span></span><span class="hex">#C0A77A</span></div>
+        <div class="row" data-hex="#4EE07A"><span class="sw" style="background:#4EE07A"></span><span><span class="name">Neon Green</span><span class="use">Neon sign &amp; pineapple</span></span><span class="hex">#4EE07A</span></div>
+      </div>
+
+      <div class="group">
+        <h2>Text</h2>
+        <div class="row" data-hex="#EBE1C3"><span class="sw" style="background:#EBE1C3"></span><span><span class="name">Cream</span><span class="use">Primary text</span></span><span class="hex">#EBE1C3</span></div>
+        <div class="row" data-hex="#C9C0A6"><span class="sw" style="background:#C9C0A6"></span><span><span class="name">Cream Dim</span><span class="use">Secondary text</span></span><span class="hex">#C9C0A6</span></div>
+      </div>
+
+      <div class="group">
+        <h2>Lines</h2>
+        <div class="row" data-hex="rgba(235,225,195,0.14)"><span class="sw" style="background:rgba(235,225,195,0.14)"></span><span><span class="name">Hairline</span><span class="use">Borders &amp; dividers</span></span><span class="hex">rgba(235,225,195,.14)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section>
+    <p class="eyebrow">Typography</p>
+    <div class="type-name">Libre Baskerville</div>
+    <div class="type-sub">A transitional serif — set throughout the site.</div>
+    <div class="glyphs">A B C D a b c d e f g &nbsp; 1 2 3 4 5 6 7 8 9 0 &nbsp; &amp; ?</div>
+
+    <div class="style-row">
+      <div class="label">Bold — 700<small>headings &amp; the neon sign</small></div>
+      <div class="sample-bold">Wicker Park Nights</div>
+    </div>
+    <div class="style-row">
+      <div class="label">Regular — 400<small>body copy &amp; menus</small></div>
+      <div class="sample-reg">Chicago's late-night garden in Wicker Park.</div>
+    </div>
+    <div class="style-row">
+      <div class="label">Italic — 400<small>taglines, set times, accents</small></div>
+      <div class="sample-ital">Since 1977.</div>
+    </div>
+
+    <p class="source">Loaded from Google Fonts: Libre Baskerville (weights 400, 700, and 400 italic).</p>
+  </section>
+
+  <footer>
+    <span>Nick's Beer Garden · Brand Reference</span>
+    <span class="dot"></span>
+  </footer>
+
+</div>
+
+<div id="toast">Copied</div>
+
+<script>
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1300);
+  }
+  document.querySelectorAll('[data-hex]').forEach(el => {
+    el.addEventListener('click', () => {
+      const hex = el.getAttribute('data-hex');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(hex).then(() => showToast('Copied ' + hex))
+          .catch(() => showToast(hex));
+      } else {
+        showToast(hex);
+      }
+    });
+  });
+</script>
+</body>
+</html>
